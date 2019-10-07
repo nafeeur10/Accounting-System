@@ -12,6 +12,6 @@ class Client extends Model
     protected $guard_name = 'web'; // or whatever guard you want to use
 
     protected $fillable = [
-        'name', 'email', 'address',
+        'companyLogo', 'companyName', 'email', 'phone', 'address', 'zipCode', 'city', 'kvkNumber', 'vatNumber', 'bankNumber', 'invoiceFootnote', 'password',
     ];
 }
