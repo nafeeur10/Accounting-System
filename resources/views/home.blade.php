@@ -1,48 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
-                    @role('admin')
-                        <a href="{{ route('client') }}" class="btn btn-success float-right mb-2">+ Create Client</a>
-                    @else
-                        <a href="#">Edit Client</a>
-                    @endrole
 
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                <!--Card content-->
+                <div class="card-body d-sm-flex justify-content-between">
 
-                                @foreach($client as $c)
-                                <tr>
-                                    <td>{{ $c->name }}</td>
-                                    <td>{{ $c->email }}</td>
-                                    <td>{{ $c->address }}</td>
-                                </tr>
-                                @endforeach
+                    <h4 class="mb-2 mb-sm-0 pt-1">
+                        <a href="https://mdbootstrap.com/docs/jquery/" target="_blank">Home Page</a>
+                        <span>/</span>
+                        <span>Dashboard</span>
+                    </h4>
 
-                                </tbody>
-                            </table>
+                    <form class="d-flex justify-content-center">
+                        <!-- Default input -->
+                        <input type="search" placeholder="Type your query" aria-label="Search" class="form-control">
+                        <button class="btn btn-primary btn-sm my-0 p" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+
+                    </form>
+
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 @endsection

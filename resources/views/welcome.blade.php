@@ -68,6 +68,22 @@
                 padding: 15px;
                 color: white;
             }
+
+            .btn {
+                margin: 0.375rem;
+                color: white!important;
+                text-transform: uppercase;
+                word-wrap: break-word;
+                white-space: normal;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.125rem;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+                transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                padding: 0.84rem 2.14rem!important;
+                font-size: 0.81rem;
+                background-color: #00bfa5;
+            }
         </style>
     </head>
     <body>
@@ -75,21 +91,18 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Dashboard</a>
+                        <a href="{{ url('/home') }}" class="btn">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
+                        <a href="{{ route('login') }}" class="btn">Login</a>
                     @endauth
                 </div>
             @endif
 
             <div class="content">
                 <div class="title m-b-md">
-                    <span class="titleHeader">Welcome to my Accounting Software</span>
-                    <br>
+                    <span><b>eAccount</b></span>
+                    <hr>
+                    {{--<br>--}}
                     <img src="{{ asset('images/accounting.jpg') }}" class="img-fluid" alt="">
                 </div>
             </div>
