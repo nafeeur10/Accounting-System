@@ -1,40 +1,44 @@
 <?php
-
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Hash;
 
+/**
+ * Class User
+ *
+ * @package App
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+*/
 class User extends Authenticatable
 {
-    use Notifiable, HasRoles;
+    use Notifiable;
+    use HasRoles;
 
+    protected $fillable = ['companyLogo', 'name', 'email', 'phone', 'address', 'zipCode', 'city', 'kvkNumber', 'vatNumber', 'bankNumber', 'invoiceFootnote', 'password', 'remember_token'];
+    
+    
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * Hash password
+     * @param $input
      */
-    protected $fillable = [
-        'role', 'email', 'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function setPasswordAttribute($input)
+    {
+        if ($input)
+            $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
+    }
+    
+    
+    public function role()
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
+    
+    
+    
 }

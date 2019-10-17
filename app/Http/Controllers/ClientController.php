@@ -3,112 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Gate;
 use Illuminate\Http\Request;
-use Spatie\Permission\Traits\HasRoles;
-use App\Client;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use App\Http\Requests\UpdateClientRequest;
+use DB;
 
 class ClientController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth');
-    }
-
-    public function index()
-    {
-        Auth::user()->assignRole('admin');
-        $client = User::all();
-        return view('client.client', ['client'=> $client]);
-    }
-
-    public function create()
-    {
-        return view('client.create');
-    }
-
-    public function store(Request $request)
-    {
-        $client = new User();
-
-        if($request->role==1)
+        if(!($this->middleware(['auth', 'role:client'])))
         {
-            $request->validate([
-                'email' => 'required|unique:users',
-                'password' => 'required'
-            ]);
-
-
-            $client->role = 'admin';
-
-            if($client->companyName=='')
-                $client->companyName = 'Admin';
-            else
-                $client->companyName = $request->companyName;
-
-            $client->companyLogo = '';
-            $client->email = $request->email;
-            $client->phone = '';
-            $client->zipCode = '';
-            $client->city = '';
-            $client->kvkNumber = '';
-            $client->vatNumber = '';
-            $client->bankNumber = '';
-            $client->invoiceFootnote = '';
-            $client->password = bcrypt($request->password);
-            $client->passwordForAdmin = $request->password;
-            $client->address = '';
-
-            $client->save();
+            return abort(401);
         }
-        else
+    }
+
+    public function userProfile()
+    {
+        $user = Auth::user();
+        $roles = Role::get()->pluck('name', 'name');
+        // dd($user);
+        return view('client.userProfile', compact('user', 'roles'));
+    }
+
+    public function editUserProfile($id)
+    {
+        $role = DB::table('roles')
+            ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
+            ->where('model_has_roles.model_id' ,'=', $id)
+            ->select('roles.name')
+            ->get();
+                    
+        //dd($users);
+
+        $roles = Role::get()->pluck('name', 'name');
+        $user = User::find($id);
+
+        return view('client.edit', compact('user', 'roles', 'role'));
+    }
+
+    public function update(UpdateClientRequest $request, User $user)
+    {
+        //$user = new User();
+
+        //$user->$request->all();
+        $user->update($request->all());
+
+        // $user1 = $request->password;
+        // $user->passwordForAdmin = $user1;
+        //$user->save();
+
+        if($files=$request->file('companyLogo'))
         {
-
-            $request->validate([
-                'companyName' => 'required',
-                'email' => 'required|unique:users',
-                'phone' => 'required',
-                'zipCode' => 'required',
-                'city' => 'required',
-                'kvkNumber' => 'required',
-                'vatNumber' => 'required',
-                'bankNumber' => 'required',
-                'invoiceFootnote' => 'required',
-                'password' => 'required',
-                'address' => 'required',
-            ]);
-            if($files=$request->file('companyLogo'))
-            {
-                $client->companyLogo = 'Logo';
-            }
-
-            $client->role = 'client';
-            $client->companyName = $request->companyName;
-            $client->email = $request->email;
-            $client->phone = $request->phone;
-            $client->zipCode = $request->zipCode;
-            $client->city = $request->city;
-            $client->kvkNumber = $request->kvkNumber;
-            $client->vatNumber = $request->vatNumber;
-            $client->bankNumber = $request->bankNumber;
-            $client->invoiceFootnote = $request->invoiceFootnote;
-            $client->password = bcrypt($request->password);
-            $client->passwordForAdmin = $request->password;
-            $client->address = $request->address;
-
-            //dd($client);
-            $client->save();
-
-
-            $lastId = $client->id;
+            $user->companyLogo = 'Logo';
+            $lastId = $user->id;
             $companyLogo = $request->file('companyLogo');
 
             $name=$lastId.$companyLogo->getClientOriginalName();
-            $uploadPath = 'public/images/';
+            $uploadPath = 'images/';
             $companyLogo->move($uploadPath, $name);
 
             $imageURL = $uploadPath.$name;
@@ -119,6 +74,9 @@ class ClientController extends Controller
             $updateImage->save();
         }
 
-        return redirect()->back()->with('message', 'Successfull! Registration is complete!');
+        // $roles = $request->input('roles') ? $request->input('roles') : [];
+        // $user->syncRoles($roles);
+
+        return redirect()->route('user-info');
     }
 }

@@ -1,26 +1,24 @@
 <?php
+Route::redirect('/', '/admin/home');
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Auth::routes(['register' => false]);
 
-Route::get('/', function () {
-    return view('welcome');
+// Change Password Routes...
+Route::get('change_password', 'Auth\ChangePasswordController@showChangePasswordForm')->name('auth.change_password');
+Route::patch('change_password', 'Auth\ChangePasswordController@changePassword')->name('auth.change_password');
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('permissions', 'Admin\PermissionsController');
+    Route::post('permissions_mass_destroy', 'Admin\PermissionsController@massDestroy')->name('permissions.mass_destroy');
+    Route::resource('roles', 'Admin\RolesController');
+    Route::post('roles_mass_destroy', 'Admin\RolesController@massDestroy')->name('roles.mass_destroy');
+    Route::resource('users', 'Admin\UsersController');
+    Route::post('users_mass_destroy', 'Admin\UsersController@massDestroy')->name('users.mass_destroy');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-
-Route::get('/clienthome', 'ClientController@index');
-Route::get('client', 'ClientController@index');
-Route::get('client/create', 'ClientController@create')->name('client');
-Route::post('client/create', 'ClientController@store');
+Route::group(['middleware' => ['auth'], 'prefix' => 'client'], function() {
+    Route::get('/user-info', 'ClientController@userProfile')->name('user-info');
+    Route::get('/user-edit/{id}', 'ClientController@editUserProfile')->name('client-user-edit');
+    Route::put('/update-user/{user}', 'ClientController@update')->name('client-update');
+});

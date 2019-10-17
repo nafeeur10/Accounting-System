@@ -1,72 +1,49 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+## Laravel Roles Permissions Admin - Spatie version
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+__Update October 2019__: this project was created in 2017 as Laravel 5.4 version, and now we upgraded it to Laravel 6 version, also changed the design theme from [AdminLTE](https://adminlte.io/) to [CoreUI](https://coreui.io)
 
-## About Laravel
+- - - - -
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is a Laravel 6 adminpanel starter project with roles-permissions management based on [Spatie Laravel-permission package](https://github.com/spatie/laravel-permission), [CoreUI](https://coreui.io) and [Datatables.net](https://datatables.net).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+We've also created almost identical project based on Joseph Silber's Bouncer package: [see here](https://github.com/LaravelDaily/laravel-roles-permissions-bouncer)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Part of this project was generated automatically by [QuickAdminPanel system](https://quickadminpanel.com/).
 
-## Learning Laravel
+![Roles Permissions screenshot](https://laraveldaily.com/wp-content/uploads/2019/10/laravel-roles-permissions-users.png)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+![Roles Permissions screenshot 02](https://laraveldaily.com/wp-content/uploads/2019/10/laravel-roles-permissions-roles.png)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Usage
 
-## Laravel Sponsors
+This is not a package - it's a full Laravel project that you should use as a starter boilerplate, and then add your own custom functionality.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- Clone the repository with `git clone`
+- Copy `.env.example` file to `.env` and edit database credentials there
+- Run `composer install`
+- Run `php artisan key:generate`
+- Run `php artisan migrate --seed` (it has some seeded data - see below)
+- That's it: launch the main URL and login with default credentials `admin@admin.com` - `password`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+This boilerplate has one role (`administrator`), one permission (`users_manage`) and one administrator user.
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+With that user you can create more roles/permissions/users, and then use them in your code, by using functionality like `Gate` or `@can`, as in default Laravel, or with help of Spatie's package methods.
 
 ## License
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The [MIT license](http://opensource.org/licenses/MIT).
+
+## Notice
+
+We are not responsible for any functionality or bugs in **CoreUI**, **Laravel-permission** or **Datatables** packages or their future versions, if you find bugs there - please contact vendors directly.
+
+---
+
+## More from our LaravelDaily Team
+
+- Check out our adminpanel generator [QuickAdminPanel](https://quickadminpanel.com)
+- Read our [Blog with Laravel Tutorials](https://laraveldaily.com)
+- FREE E-book: [50 Laravel Quick Tips (and counting)](https://laraveldaily.com/free-e-book-40-laravel-quick-tips-and-counting/)
+- Subscribe to our [newsletter with 20+ Laravel links every Thursday](http://laraveldaily.com/weekly-laravel-newsletter/)
+- Subscribe to our [YouTube channel Laravel Business](https://www.youtube.com/channel/UCTuplgOBi6tJIlesIboymGA)
+- Enroll in our [Laravel Online Courses](https://laraveldaily.teachable.com/)

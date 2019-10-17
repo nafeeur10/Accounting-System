@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class HomeController extends Controller
 {
@@ -22,11 +20,10 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        Auth::user()->assignRole('admin');
         return view('home');
     }
 }
