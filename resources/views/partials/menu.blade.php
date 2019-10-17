@@ -19,6 +19,51 @@
                         {{ trans('global.user') }}
                     </a>
                 </li>
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link  nav-dropdown-toggle" href="#">
+                        <i class="fa-fw fas fa-users nav-icon">
+
+                        </i>
+                        {{ trans('cruds.clientManagement.title') }}
+                    </a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                                <i class="fa-fw fas fa-hand-point-right nav-icon">
+
+                                </i>
+                                {{ trans('cruds.clientManagement.outgoing') }}
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                                <i class="fa-fw fas fa-hand-point-left nav-icon">
+
+                                </i>
+                                {{ trans('cruds.clientManagement.incoming') }}
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                                <i class="fa-fw fas fa-address-book nav-icon">
+
+                                </i>
+                                {{ trans('cruds.clientManagement.contacts') }}
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                                <i class="fa-fw fas fa-cog nav-icon">
+
+                                </i>
+                                {{ trans('cruds.clientManagement.settings') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             @endif
             @can('users_manage')
                 <li class="nav-item nav-dropdown">

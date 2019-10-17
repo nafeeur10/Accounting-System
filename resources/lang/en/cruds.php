@@ -5,6 +5,13 @@ return [
         'title'          => 'User management',
         'title_singular' => 'User management',
     ],
+    'clientManagement' => [
+        'title'        => 'Client Actions',
+        'outgoing'     => 'Outgoing',
+        'incoming'     => 'Incoming',
+        'contacts'     => 'Contacts',
+        'settings'     => 'Settings',
+    ],
     'permission'     => [
         'title'          => 'Permissions',
         'title_singular' => 'Permission',
