@@ -1,6 +1,5 @@
-## Laravel Roles Permissions Admin - Spatie version
+## Accounting Software with Laravel 6
 
-__Update October 2019__: this project was created in 2017 as Laravel 5.4 version, and now we upgraded it to Laravel 6 version, also changed the design theme from [AdminLTE](https://adminlte.io/) to [CoreUI](https://coreui.io)
 
 - - - - -
 
@@ -14,20 +13,6 @@ Part of this project was generated automatically by [QuickAdminPanel system](htt
 
 ![Roles Permissions screenshot 02](https://laraveldaily.com/wp-content/uploads/2019/10/laravel-roles-permissions-roles.png)
 
-## Usage
-
-This is not a package - it's a full Laravel project that you should use as a starter boilerplate, and then add your own custom functionality.
-
-- Clone the repository with `git clone`
-- Copy `.env.example` file to `.env` and edit database credentials there
-- Run `composer install`
-- Run `php artisan key:generate`
-- Run `php artisan migrate --seed` (it has some seeded data - see below)
-- That's it: launch the main URL and login with default credentials `admin@admin.com` - `password`
-
-This boilerplate has one role (`administrator`), one permission (`users_manage`) and one administrator user.
-
-With that user you can create more roles/permissions/users, and then use them in your code, by using functionality like `Gate` or `@can`, as in default Laravel, or with help of Spatie's package methods.
 
 ## License
 
