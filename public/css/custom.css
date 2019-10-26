@@ -115,3 +115,33 @@ table.dataTable thead .sorting_desc {
     padding-left: 0px;
     padding-right: 0px;
 }
+
+#editableCustomer
+{
+    background-color: white;
+    border-left: 1px solid #CDE5FB;
+    padding: 10px;
+}
+
+#editCustomer
+{
+    background-color: #cde5fb;
+    padding: 10px;
+}
+
+#editableCustomer p
+{
+    margin-bottom: 0!important;
+    color: black;
+}
+
+#clientInvoiceInfo p
+{
+    margin-bottom: 0!important;
+}
+
+#invoice
+{
+    background-color: white;
+    padding: 10px;
+}

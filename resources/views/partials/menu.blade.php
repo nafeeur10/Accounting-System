@@ -3,7 +3,7 @@
 
         <ul class="nav">
             <li class="nav-item">
-                <a href="{{ route("admin.home") }}" class="nav-link">
+                <a href="{{ route('admin.home') }}" class="nav-link">
                     <i class="nav-icon fas fa-fw fa-tachometer-alt">
 
                     </i>
@@ -28,7 +28,7 @@
                     </a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                            <a href="{{ route('invoice') }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
                                 <i class="fa-fw fas fa-hand-point-right nav-icon">
 
                                 </i>

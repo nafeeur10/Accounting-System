@@ -28,4 +28,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'client'], function() {
     Route::get('/edit/{user}', 'ContactController@edit')->name('contacts.edit');
     Route::put('/updateContact/{user}', 'ContactController@update')->name('contacts.update');
     Route::delete('/destroy/{user}', 'ContactController@destroy')->name('contacts.destroy');
+
+    // Invoice
+
+    Route::get('/outgoing', 'InvoiceController@index')->name('invoice');
+    Route::get('/invoice/create/{user}', 'InvoiceController@create')->name('invoice-index');
 });

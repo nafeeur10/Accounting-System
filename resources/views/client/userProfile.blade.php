@@ -55,7 +55,7 @@
                     @if($user->phone)
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.email') }}
+                            {{ trans('cruds.user.fields.phone') }}
                         </th>
                         <td>
                             {{ $user->phone }}
