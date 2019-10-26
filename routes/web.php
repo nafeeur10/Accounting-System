@@ -21,4 +21,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'client'], function() {
     Route::get('/user-info', 'ClientController@userProfile')->name('user-info');
     Route::get('/user-edit/{id}', 'ClientController@editUserProfile')->name('client-user-edit');
     Route::put('/update-user/{user}', 'ClientController@update')->name('client-update');
+    Route::get('/contact', 'ContactController@index')->name('contact');
+    Route::get('/addContact', 'ContactController@create')->name('addContact');
+    Route::post('saveContact', 'ContactController@store')->name('saveContact');
+    Route::get('/showContact/{user}', 'ContactController@show')->name('contacts.show');
+    Route::get('/edit/{user}', 'ContactController@edit')->name('contacts.edit');
+    Route::put('/updateContact/{user}', 'ContactController@update')->name('contacts.update');
+    Route::delete('/destroy/{user}', 'ContactController@destroy')->name('contacts.destroy');
 });

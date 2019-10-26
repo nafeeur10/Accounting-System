@@ -14,6 +14,15 @@ textarea {
     margin-top: .2rem;
 }
 
+.card-header
+{
+  background-color: lightgreen;
+  font-size: 20px;
+  text-align: center;
+  font-weight: 800;
+}
+
+
 .dataTables_filter {
     margin-right: .2rem;
 }
