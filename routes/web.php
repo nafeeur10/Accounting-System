@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'client'], function() {
     Route::post('/saveInvoice', 'InvoiceController@save')->name('saveInvoiceproducts');
     Route::post('/createInvoice', 'InvoiceController@createInvoice')->name('createInvoiceNumber');
     Route::get('/invoice', 'InvoiceController@invoice')->name('final-invoice');
+    Route::get('/downloadPDF/{id}','InvoiceController@downloadPDF');
     // Route::get('/readInvoice', 'InvoiceController@read')->name('readInvoice');
     // Product
 

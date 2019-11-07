@@ -102,13 +102,10 @@
       </div>
     </div>
 
-    <!-- <div class="row">
-      <div class="col-md-8"></div>
-      <div class="col-md-4">
-        <hr>
-        <p class="text-right pr-3"><b>Total: </b>1000</p>
-        <hr>
-      </div>
-    </div> -->
+    <div class="row text-center">
+      <div class="col-md-4"></div>
+      <a class="col-md-4 btn btn-success" href="{{ action('InvoiceController@downloadPDF', $userMain->id) }}"><i class="fas fa-download"></i> Download PDF</a>
+      <div class="col-md-4"></div>
+    </div>
 </div>
 @endsection

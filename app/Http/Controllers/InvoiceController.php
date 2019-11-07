@@ -6,7 +6,7 @@ use App\Invoice;
 use App\Contact;
 use App\InvoiceNumber;
 use App\Product;
-use App\User;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -143,5 +143,20 @@ class InvoiceController extends Controller
         $client = Auth::user();
 
         return view('invoice.invoice', compact('userMain', 'client', 'products', 'invoiceProducts'));
+    }
+
+    public function downloadPDF($id) 
+    {
+        $client = Auth::user();
+
+        $invoiceLatest = Invoice::latest()->first();
+        $lastInvoiceNumber = $invoiceLatest->invoiceNumber;
+        $invoiceProducts = Invoice::where('invoiceNumber', $lastInvoiceNumber)->get();
+        
+        $userMain = Contact::find($id);
+
+        //return view('invoice.pdf', compact('client', 'invoiceProducts', 'userMain'));
+        $pdf = PDF::loadView('invoice.pdf', compact('client', 'invoiceProducts', 'userMain'));
+        return $pdf->download('invoice.pdf');
     }
 }
