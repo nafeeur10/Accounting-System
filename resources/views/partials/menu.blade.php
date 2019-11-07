@@ -19,6 +19,15 @@
                         {{ trans('global.user') }}
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('product.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-fw fa-apple-alt">
+
+                        </i>
+                        {{ trans('global.product') }}
+                    </a>
+                </li>
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link  nav-dropdown-toggle" href="#">
                         <i class="fa-fw fas fa-users nav-icon">
@@ -68,7 +77,7 @@
             @can('users_manage')
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link  nav-dropdown-toggle" href="#">
-                        <i class="fa-fw fas fa-users nav-icon">
+                        <i class="fa-fw fas fa-tasks nav-icon">
 
                         </i>
                         {{ trans('cruds.userManagement.title') }}

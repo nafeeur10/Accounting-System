@@ -1,40 +1,138 @@
 @extends('layouts.admin')
 @section('content')
 
+<style>
+#invoiceDiv p
+{
+  margin-bottom: 0!important;
+}
+</style>
+
 <div class="container pl-0 pr-0 mb-3">
-    <button class="btn btn-success">Sent</button>
-    <button class="btn btn-info">Download</button>
+    <button class="btn btn-success"><i class="fas fa-paper-plane"></i> Sent</button>
+    <button class="btn btn-info"><i class="fas fa-download"></i> Download</button>
 </div>
 
-<div class="container card" id="invoice">
-    <div class="row">
-        <div class="col-md-6">
-            <a style="text-decoration: none" href="{{ route('contacts.edit', $user->id) }}">
-                <i class="fas fa-edit" id="editCustomer"></i>
-                <div id="editableCustomer">
-                    <p> {{ $user->companyName }} </p>
-                    <p>{{ $user->firstName }} {{ $user->lastName }}</p>
-                    <p>{{ $user->street }}, {{ $user->postalCode }}</p>
-                    <p>{{ $user->city }}, {{ $user->country }}.</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6">
-            <p><b>Online with You</b></p>
-            <div id="clientInvoiceInfo">
-                <p> {{ $client->name }} </p>
-                <p> {{ $client->address }} {{ $user->zipCode }} {{ $user->city }} </p>
-                <br>
-                <p> {{ $client->email }} </p>
-                <p> {{ $client->phone }} </p>
-                <br>
-                <p> {{ $client->kvkNumber }} </p>
-                <p> {{ $client->vatNumber }} </p>
-                <p> {{ $client->bankNumber }} </p>
-            </div>
-        </div>
+<div class="container card">
+  <div class="row mt-4 mb-4">
+    <div class="col-md-6">
+      <label for="invoiceNumber"><b>Invoice Number #</b></label>
+      <input type="text" id="invoiceNumber" class="form-control" value="{{ $invoice }}">
+
+      <br>
+
+      <!-- <label for="invoiceNumber"><b>Customer</b></label>
+      <select name="customer" class="form-control" id="customer">
+        <option value="0">Select Customer</option>
+        <option value="1">Aspile</option>
+      </select> -->
+
+      <div>
+        <p><b>Customer Details</b></p>
+        <hr>
+        <p style="margin-bottom: 0"><b>{{ $user->companyName }}</b></p>
+        <p style="margin-bottom: 0">{{ $user->firstName }} {{ $user->lastName }}</p>
+        <p>{{ $user->street }}, {{ $user->city }} {{ $user->country }}</p>
+        <a href="{{ route('contacts.edit', $user->id) }}">Edit Customer</a>
+      </div>
+
+      
     </div>
+    
+  </div>
 </div>
+
+<div class="container card">
+  <div class="row mt-4 mb-4">
+    <div class="container">
+    <form action="{{ route('saveInvoiceproducts')}}" method="POST" id="saveInvoiceProductForm">
+
+      <div class="col-md-12 mb-5">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="invoiceNumber"><b>Invoice Date</b></label>
+            <input type="date" class="form-control" name="invoiceDate" id="invoiceDate" value="{{ date('Y-m-d') }}">
+
+          </div>
+          <div class="col-md-6">
+            <label for="invoiceNumber"><b>Due Date</b></label>
+            @php
+              $date = date("Y-m-d");
+            @endphp
+            <input type="date" class="form-control" name="invoiceDueDate" id="invoiceDueDate" value="{{ date('Y-m-d', strtotime($date. ' + 30 days')) }}">
+          </div>
+        </div>
+      </div>
+         
+      <table class="table invoice-table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Unit Cost</th>
+            <th>Quantity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <input type="hidden" name="userID" value="{{ $user->id }}"/>
+
+        <tbody id="dynamic_row">
+          <tr id="row1">
+
+            <td>
+              <select name="product_id[]" class="invoiceProducts">
+                  <option>--Select a Option--</option>
+                  @foreach($products as $product)
+                    <option value="{{ $product->id }}">{{ $product->productName }}</option>
+                  @endforeach
+              </select>
+            </td>
+
+            <td>
+              <input type="text" class="form-control itemDes" name="itemDescription[]" id="itemDescription">
+            </td>
+
+            <td><input type="text" class="form-control itemCost" name="itemCost[]" id="itemCost"></td>
+            
+            <td>
+              <input type="number" class="form-control itemQuantity" name="itemQuantity[]">
+              
+            </td>
+
+            <td><button type="button" name="add" id="add" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add More</button></td>
+            
+          </tr>
+          
+        </tbody>
+        
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              @csrf
+              <button type="submit" name="createInvoiceButton" id="createInvoiceBtn" class="btn btn-success mb-3">
+                
+                  <i class="fas fa-external-link-alt"></i> Create Invoice
+               
+              </button>
+              
+            </td> 
+            <td></td>
+            <td></td> 
+          </tr>
+        </tfoot>
+
+       
+      </table>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+
 
 
 @endsection
@@ -83,6 +181,85 @@
             .columns.adjust();
     });
 })
+
+$("#InvoiceID").text($("#invoiceNumber").val());
+$("#InvoiceDatePublish").text($("#invoiceDate").val());
+$("#InvoiceDueDate").text($("#invoiceDueDate").val());
+
+var conceptName = $("select[name='product_id']").find(":selected").text();
+
+$(function(){
+    onPageLoad();
+});
+
+function onPageLoad(){
+  $('.invoiceProducts').select2();
+}
+
+let i=1;  
+var j = 0;
+
+$("table.invoice-table").on('select-added', function(e) {
+  $(this).find('.invoiceProducts').select2();
+});
+
+$('#add').click(function(){  
+   i++;
+   j=i;
+
+   //console.log("Inside: " + i);
+
+   var html = '<tr id="row'+i+'" class="dynamic-added">';
+
+   html += '<td><select name="product_id[]" class="invoiceProducts" id="itemSelect'+i+'"><option>--Select a option--</option>@foreach($products as $product)<option value="{{ $product->id }}">{{ $product->productName }}</option>@endforeach</select></td>';
+   html += '<td><input type="text" class="form-control itemDes" name="itemDescription[]" id="itemDescription'+i+'"></td>';
+   html += '<td><input type="text" class="form-control itemCost" name="itemCost[]" id="itemCost'+i+'"></td>';
+   html += '<td><input type="number" class="form-control itemQuantity" name="itemQuantity[]" id="itemQuantity'+i+'"></td>';
+   html += '<td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fas fa-minus-circle"></i> Romove</button></td></tr>';
+   
+   let tb = $("table.invoice-table").find("tbody");
+   tb.append(html);
+   tb.find('tr').last().trigger('select-added');
+});  
+
+
+$(document).on('click', '.btn_remove', function(){  
+   var button_id = $(this).attr("id");   
+   $('#row'+button_id+'').remove();  
+});  
+
+console.log(j);
+
+
+
+
+// AJAX Request
+$('body').on('change', '.invoiceProducts', function() {
+  
+  var id = $(this).val();
+
+  var idOfSelect = this.closest('tr').id;
+
+  console.log("Select ID: " + idOfSelect);
+  
+  //console.log("ID: " + id);
+
+  $.ajax({
+      url: '/client/product/select/' + id,
+      method: 'GET',
+      success: function(data) {
+        console.log(data);
+        $("#"+idOfSelect).find(".itemDes").val(data.productDescription);
+        $("#"+idOfSelect).find(".itemCost").val(data.productUnitCost);
+        $("#"+idOfSelect).find(".itemQuantity").val(1);
+      },
+      error: function(data) {
+          console.log(data);
+      }
+  });
+});
+
+
 
 </script>
 @endsection

@@ -41,6 +41,8 @@ class ContactController extends Controller
             return abort(401);
         }
 
+        
+
         return view('contacts.show', compact('user'));
     }
 

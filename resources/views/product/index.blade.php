@@ -1,9 +1,17 @@
 @extends('layouts.admin')
 @section('content')
-
+@can('users_manage')
+    <div style="margin-bottom: 10px;" class="row">
+        <div class="col-lg-12">
+            <a class="btn btn-success" href="{{ route('product.create') }}">
+                + {{ trans('global.add') }} {{ trans('cruds.product.title_singular') }}
+            </a>
+        </div>
+    </div>
+@endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.contact.title') }}
+        {{ trans('cruds.product.title_singular') }} {{ trans('global.list') }}
     </div>
 
     <div class="card-body">
@@ -15,16 +23,16 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.contact.fields.id') }}
+                            {{ trans('cruds.product.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.contact.fields.firstName') }}
+                            {{ trans('cruds.product.fields.productName') }}
                         </th>
                         <th>
-                            {{ trans('cruds.contact.fields.email') }}
+                            {{ trans('cruds.product.fields.productDescription') }}
                         </th>
                         <th>
-                            {{ trans('cruds.contact.fields.phone') }}
+                            {{ trans('cruds.product.fields.productUnitCost') }}
                         </th>
                         <th>
                             &nbsp;Actions
@@ -32,28 +40,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $key => $user)
-                        <tr data-entry-id="{{ $user->id }}">
+                    @foreach($products as $key => $product)
+                        <tr data-entry-id="{{ $product->id }}">
                             <td>
 
                             </td>
                             <td>
-                                {{ $user->id ?? '' }}
+                                {{ $product->id ?? '' }}
                             </td>
                             <td>
-                                {{ $user->firstName ?? '' }}
+                                {{ $product->productName ?? '' }}
                             </td>
                             <td>
-                                {{ $user->email ?? '' }}
+                                {{ $product->productDescription ?? '' }}
                             </td>
+
                             <td>
-                                {{ $user->phone ?? '' }}
+                                {{ $product->productUnitCost ?? '' }}
                             </td>
                             
                             <td>
-                                <a class="btn btn-xs btn-primary" id="sentInvoice" href="{{ route('invoice-index', $user->id) }}">
-                                    {{ trans('global.sentInvoice') }}
+                                <a class="btn btn-xs btn-primary" href="{{ route('product.show', $product->id) }}">
+                                    {{ trans('global.view') }}
                                 </a>
+
+                                <a class="btn btn-xs btn-info" href="{{ route('product.edit', $product->id) }}">
+                                    {{ trans('global.edit') }}
+                                </a>
+
+                                <form action="{{ route('product.destroy', $product->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                </form>
 
                             </td>
 
@@ -66,14 +85,13 @@
 
     </div>
 </div>
-
 @endsection
 @section('scripts')
 @parent
 <script>
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('client_manage')
+@can('users_manage')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
@@ -114,26 +132,5 @@
     });
 })
 
-
-$("#sentInvoice").click(function(){
-
-    $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
-
-    $.ajax({
-        url: '{{ route("createInvoiceNumber") }}',
-        method: 'POST',
-        data: {},
-        success: function(){
-            console.log("Okay");
-        },
-        error: function(){
-            console.log("Error");
-        }
-    })
-})
 </script>
 @endsection

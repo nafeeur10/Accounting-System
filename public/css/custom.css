@@ -119,7 +119,6 @@ table.dataTable thead .sorting_desc {
 #editableCustomer
 {
     background-color: white;
-    border-left: 1px solid #CDE5FB;
     padding: 10px;
 }
 
@@ -144,4 +143,33 @@ table.dataTable thead .sorting_desc {
 {
     background-color: white;
     padding: 10px;
+}
+
+.select2-container .select2-selection--single
+{
+    height: 35px!important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered
+{
+    line-height: 30px!important;
+}
+
+.form-control
+{
+    color: #000!important;
+    background-color: transparent!important;
+    border: 2px solid #33b5e5!important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered
+{
+    min-width: 150px!important;
+    text-align: center;
+}
+
+#createInvoiceBtn a
+{
+    color: white;
+    text-decoration: none;
 }

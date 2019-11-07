@@ -76,6 +76,21 @@ return [
 
         ]
     ],
+
+    'product'      => [
+        'title_singular' => 'Product',
+        'fields'   => [
+            'id'   => 'ID',
+            'id_helper' => '',
+            'productName' => 'Product Name',
+            'productName_helper' => '',
+            'productDescription' => 'Product Description',
+            'productDescription_helper' => '',
+            'productUnitCost' => 'Product Unit Cost',
+            'productUnitCost_helper' => '',
+        ]
+    ],
+
     'user'           => [
         'title'          => 'Users',
         'title_singular' => 'User',
