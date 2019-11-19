@@ -100,7 +100,9 @@
               
             </td>
 
-            <td><button type="button" name="add" id="add" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add More</button></td>
+            <td>
+              <i class="fas fa-plus-circle text-success mt-2" style="cursor:pointer" name="add" id="add"></i>
+            </td>
             
           </tr>
           
@@ -193,14 +195,18 @@ $(function(){
 });
 
 function onPageLoad(){
-  $('.invoiceProducts').select2();
+  $('.invoiceProducts').select2({
+    tags: true
+  });
 }
 
 let i=1;  
 var j = 0;
 
 $("table.invoice-table").on('select-added', function(e) {
-  $(this).find('.invoiceProducts').select2();
+  $(this).find('.invoiceProducts').select2({
+    tags: true
+  });
 });
 
 $('#add').click(function(){  
@@ -215,7 +221,7 @@ $('#add').click(function(){
    html += '<td><input type="text" class="form-control itemDes" name="itemDescription[]" id="itemDescription'+i+'"></td>';
    html += '<td><input type="text" class="form-control itemCost" name="itemCost[]" id="itemCost'+i+'"></td>';
    html += '<td><input type="number" class="form-control itemQuantity" name="itemQuantity[]" id="itemQuantity'+i+'"></td>';
-   html += '<td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fas fa-minus-circle"></i> Romove</button></td></tr>';
+   html += '<td><i class="fas fa-minus-circle btn_remove text-danger" name="remove" id="'+i+'" style="cursor: pointer;"></i></td></tr>';
    
    let tb = $("table.invoice-table").find("tbody");
    tb.append(html);
@@ -231,7 +237,8 @@ $(document).on('click', '.btn_remove', function(){
 console.log(j);
 
 
-
+var length = $('#row1 option').length;
+//console.log(length);
 
 // AJAX Request
 $('body').on('change', '.invoiceProducts', function() {
@@ -239,22 +246,40 @@ $('body').on('change', '.invoiceProducts', function() {
   var id = $(this).val();
 
   var idOfSelect = this.closest('tr').id;
+ 
 
-  console.log("Select ID: " + idOfSelect);
+  //var newProduct = $("#"+idOfSelect)
+
+  //console.log("Select ID: " + idOfSelect);
   
-  //console.log("ID: " + id);
+  //console.log("I am here...");
 
   $.ajax({
       url: '/client/product/select/' + id,
       method: 'GET',
       success: function(data) {
-        console.log(data);
+        //console.log(data);
         $("#"+idOfSelect).find(".itemDes").val(data.productDescription);
         $("#"+idOfSelect).find(".itemCost").val(data.productUnitCost);
         $("#"+idOfSelect).find(".itemQuantity").val(1);
       },
       error: function(data) {
-          console.log(data);
+        console.log(data);
+
+        // if(isNaN(id))
+        // {
+        //   alert("Oh yes! It's a String" + id);
+        // }
+        // else
+        // {
+        //   alert("Oh NO it is a number");
+        // }  
+          // if(idOfSelect==1)
+          // {
+          //   var lastValue = $('"#"+idOfSelect option:last-child').val();
+          // }
+          
+         // alert("New Product " + length);
       }
   });
 });

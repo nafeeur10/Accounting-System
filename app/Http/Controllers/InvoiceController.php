@@ -92,7 +92,7 @@ class InvoiceController extends Controller
                       ->orderBy('id', 'DESC')
                       ->first();
         //var_dump ($invoioceNo);
-        // return ($size);
+         //return ($size);
 
         for($i=0; $i<$size; $i++)
         {
@@ -104,6 +104,22 @@ class InvoiceController extends Controller
             $invoice->userID = $request->userID;
 
             $productID = $request['product_id'][$i];
+
+            if(!(is_numeric($productID)))
+            {
+                $newProduct = new Product();
+                $newProduct->productName = $productID;
+                $newProduct->productDescription = $request['itemDescription'][$i];
+                $newProduct->productUnitCost = $request['itemCost'][$i];
+
+                $newProduct->save();  
+                
+                $LatestProduct = Product::latest()->first();
+                $productID = $LatestProduct->id;
+            }
+
+            
+           
             $product = Product::findOrFail($productID);
             $productName = $product->productName;
 
@@ -113,6 +129,8 @@ class InvoiceController extends Controller
             $invoice->productUnitPrice = $request['itemCost'][$i];
             $invoice->productQuantity = $request['itemQuantity'][$i];
             $invoice->rowProductPrice = ($request['itemCost'][$i])*($request['itemQuantity'][$i]);
+
+            //dd($invoice);
             $invoice->save();
         }
 
