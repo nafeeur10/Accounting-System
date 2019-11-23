@@ -91,6 +91,19 @@ return [
         ]
     ],
 
+    'incoming'      => [
+        'title'    => 'Incoming List',
+        'title_singular' => 'Incoming',
+        'fields'   => [
+            'id'   => 'ID',
+            'id_helper' => '',
+            'fileName' => 'File Name',
+            'fileName_helper' => '',
+            'date' => 'Date',
+            'date_helper' => '',
+        ]
+    ],
+
     'user'           => [
         'title'          => 'Users',
         'title_singular' => 'User',

@@ -51,10 +51,8 @@
             <tbody class="text-center">
                 <tr>
                 <td>
-                    <p><b>Invoice Date # </b>{{ $invoiceProducts[0]->invoice_date }}</p>
-                </td>
-                <td>
-                    <p><b>Due Date # </b> {{ $invoiceProducts[0]->invoice_due_date }}</p>
+                    <p class="float-left"><b>Invoice Date # </b>{{ $invoiceProducts[0]->invoice_date }}</p>
+                    <p class="float-right"><b>Due Date # </b> {{ $invoiceProducts[0]->invoice_due_date }}</p>
                 </td>
                 </tr>
             </tbody>

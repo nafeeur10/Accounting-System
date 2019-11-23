@@ -39,8 +39,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'client'], function() {
     Route::get('/invoice', 'InvoiceController@invoice')->name('final-invoice');
     Route::get('/downloadPDF/{id}','InvoiceController@downloadPDF');
     // Route::get('/readInvoice', 'InvoiceController@read')->name('readInvoice');
+    
     // Product
-
     Route::resource('product', 'ProductController');
+
+    // Incoming
+    Route::resource('incoming', 'IncomingController');
     
 });

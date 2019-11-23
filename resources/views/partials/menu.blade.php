@@ -46,7 +46,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                            <a href="{{ route('incoming.index') }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
                                 <i class="fa-fw fas fa-hand-point-left nav-icon">
 
                                 </i>
