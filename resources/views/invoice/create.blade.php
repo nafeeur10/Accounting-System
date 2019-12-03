@@ -6,12 +6,13 @@
 {
   margin-bottom: 0!important;
 }
+
+.dt-buttons {
+  display: none!important;
+}
 </style>
 
-<div class="container pl-0 pr-0 mb-3">
-    <button class="btn btn-success"><i class="fas fa-paper-plane"></i> Sent</button>
-    <button class="btn btn-info"><i class="fas fa-download"></i> Download</button>
-</div>
+@include('partials.customer_modal')
 
 <div class="container card">
   <div class="row mt-4 mb-4">
@@ -21,19 +22,13 @@
 
       <br>
 
-      <!-- <label for="invoiceNumber"><b>Customer</b></label>
-      <select name="customer" class="form-control" id="customer">
-        <option value="0">Select Customer</option>
-        <option value="1">Aspile</option>
-      </select> -->
+     <button class="btn btn-success my-3" id="selectCustomerBtn" type="button" data-toggle="modal" data-target="#customerModal">
+       <i class="fas fa-user mr-2"></i>Select Customer</button>
 
-      <div>
+      <div id="customerDetailsDiv">
         <p><b>Customer Details</b></p>
         <hr>
-        <p style="margin-bottom: 0"><b>{{ $user->companyName }}</b></p>
-        <p style="margin-bottom: 0">{{ $user->firstName }} {{ $user->lastName }}</p>
-        <p>{{ $user->street }}, {{ $user->city }} {{ $user->country }}</p>
-        <a href="{{ route('contacts.edit', $user->id) }}">Edit Customer</a>
+        <p id="customerDetails"></p>
       </div>
 
       
@@ -75,7 +70,6 @@
           </tr>
         </thead>
 
-        <input type="hidden" name="userID" value="{{ $user->id }}"/>
 
         <tbody id="dynamic_row">
           <tr id="row1">
@@ -113,6 +107,7 @@
             <td></td>
             <td></td>
             <td>
+              <input type="hidden" name="userID" value="" id="userIDOfCustomer"/>
               @csrf
               <button type="submit" name="createInvoiceButton" id="createInvoiceBtn" class="btn btn-success mb-3">
                 
@@ -141,48 +136,22 @@
 @section('scripts')
 @parent
 <script>
-    $(function () {
+
+
+$(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('client_manage')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-  let deleteButton = {
-    text: deleteButtonTrans,
-    url: "{{ route('admin.users.mass_destroy') }}",
-    className: 'btn-danger',
-    action: function (e, dt, node, config) {
-      var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
-          return $(entry).data('entry-id')
-      });
-
-      if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
-
-        return
-      }
-
-      if (confirm('{{ trans('global.areYouSure') }}')) {
-        $.ajax({
-          headers: {'x-csrf-token': _token},
-          method: 'POST',
-          url: config.url,
-          data: { ids: ids, _method: 'DELETE' }})
-          .done(function () { location.reload() })
-      }
-    }
-  }
-  dtButtons.push(deleteButton)
-@endcan
-
   $.extend(true, $.fn.dataTable.defaults, {
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  $('.datatable-User:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  $('.datatable-User:not(.ajaxTable)').DataTable()
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
 })
+var table = $('.datatable-User').DataTable();
+table.columns.adjust().draw();
 
 $("#InvoiceID").text($("#invoiceNumber").val());
 $("#InvoiceDatePublish").text($("#invoiceDate").val());
@@ -285,6 +254,40 @@ $('body').on('change', '.invoiceProducts', function() {
 });
 
 
+
+$("#customerDetailsDiv").hide();
+
+$(".sentInvoiceModal").click(function(event) {
+
+  event.preventDefault();
+  $("#customerDetailsDiv").show();
+  $("#customerDetails").empty();
+
+  var id = $(this).attr('data-id');
+  $("#userIDOfCustomer").val(id);
+  console.log(id);
+
+  $.ajax({
+    url: '/client/invoice/customer/' + id,
+    method: 'GET',
+    success: function(data) {
+      console.log(data);
+
+
+      var html = '<p><b>'+ data.companyName + '</b></p>';
+      html+= '<p>'+ data.firstName + ' ' + data.lastName + '</p>';
+      html+='<p>'+ data.street + ', ' + data.postalCode + ', ' + data.city + ', ' + data.country + '</p>';
+
+      $("#customerDetails").append(html);
+
+      $('#customerModal').modal('hide');
+    },
+    error: function() {
+      console.log(data);
+    }
+  });
+
+})
 
 </script>
 @endsection

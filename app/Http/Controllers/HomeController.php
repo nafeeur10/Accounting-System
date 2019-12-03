@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Invoice;
+use App\User;
+use Gate;
+use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,6 +29,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $totalUser = User::count();
+
+        if(Gate::allows('users_manage'))
+        {
+            $totalInvoice = Invoice::count();
+        }
+        else
+        {
+            $id = Auth::id();
+
+            $totalInvoice = Invoice::where('customerID', $id)
+                ->distinct('invoiceNumber')
+                ->count();
+        }
+            
+        return view('home', compact('totalUser', 'totalInvoice'));
     }
 }

@@ -116,7 +116,7 @@
                             {{ $user->invoiceFootnote }}
                         </td>
                     </tr>
-
+                    @can('users_manage')
                     <tr>
                         <th>
                             {{ trans('cruds.user.fields.password') }}
@@ -125,6 +125,7 @@
                             {{ $user->passwordForAdmin }}
                         </td>
                     </tr>
+                    @endcan
 
                     <tr>
                         <th>

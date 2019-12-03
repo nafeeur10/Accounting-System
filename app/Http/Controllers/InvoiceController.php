@@ -13,6 +13,36 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
+
+    public function deleteInvoice()
+    {
+        DB::table('main_invoice')->orderBy('id', 'desc')->limit(1)->delete();
+        DB::table('invoice_numbers')->orderBy('id', 'desc')->limit(1)->delete();
+    }
+
+    function toNumber($dest)
+    {
+        if ($dest=='1')
+            return 1;
+        else if($dest=='2')
+            return 2;
+        else if($dest=='3')
+            return 3;
+        else if($dest=='4')
+            return 4;
+        else if($dest=='5')
+            return 5;
+        else if($dest=='6')
+            return 6;
+        else if($dest=='7')
+            return 7;
+        else if($dest=='8')
+            return 8;
+        else if($dest=='9')
+            return 9;
+        else
+            return 0;
+    }
     
     public function index()
     {
@@ -20,7 +50,7 @@ class InvoiceController extends Controller
         return view('invoice.index', compact('users'));
     }
 
-    public function createInvoice(Request $request)
+    public function createInvoice()
     {
         $count = DB::table('invoice_numbers')->count();
 
@@ -52,28 +82,34 @@ class InvoiceController extends Controller
     }
 
    
-    public function create(Contact $user)
+    public function create()
     {
-        // Generate an Invoice Number
-        $invoiceCreate = InvoiceNumber::latest()->first();
-        
-        $year = $invoiceCreate['yearOfInvoice'];
-        $idOfI = $invoiceCreate['invoice_id'];
-        
-        $invoice = 'T'.$year.str_pad( $idOfI, 3, '0', STR_PAD_LEFT );
-        DB::table('main_invoice')->insertOrIgnore([
-            ['invoiceNumber' => $invoice]
-        ]);
 
+        $this->createInvoice();
 
-        // Get last Generated Invoice Number
-
+            // Generate an Invoice Number
+            $invoiceCreate = InvoiceNumber::latest()->first();
+            
+            $year = $invoiceCreate['yearOfInvoice'];
+            $idOfI = $invoiceCreate['invoice_id'];
+            
+            $invoice = 'T'.$year.str_pad( $idOfI, 3, '0', STR_PAD_LEFT );
+            DB::table('main_invoice')->insertOrIgnore([
+                ['invoiceNumber' => $invoice]
+            ]);
 
 
         $products = Product::all();
+        $users = Contact::all();
         $client = Auth::user();
 
-        return view('invoice.create', compact('user', 'client', 'invoice', 'products'));
+        return view('invoice.create', compact('users', 'client', 'invoice', 'products'));
+    }
+
+    public function getCustomer($id)
+    {
+        $customer = Contact::findOrFail($id);
+        return response()->json($customer);
     }
 
     
@@ -101,7 +137,11 @@ class InvoiceController extends Controller
             $invoice->invoiceNumber = $invoioceNo->invoiceNumber;
             $invoice->invoice_date = $request->invoiceDate;
             $invoice->invoice_due_date = $request->invoiceDueDate;
+            $authuser = Auth::id();
+            $invoice->customerID = $authuser;
             $invoice->userID = $request->userID;
+
+            //dd($request->userID);
 
             $productID = $request['product_id'][$i];
 

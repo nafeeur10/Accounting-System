@@ -32,10 +32,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'client'], function() {
     // Invoice
 
     Route::get('/outgoing', 'InvoiceController@index')->name('invoice');
-    Route::get('/invoice/create/{user}', 'InvoiceController@create')->name('invoice-index');
+    Route::get('/invoice/create', 'InvoiceController@create')->name('invoice-index');
+    Route::get('invoice/customer/{id}', 'InvoiceController@getCustomer')->name('getcustomer');
     Route::get('/product/select/{id}', 'InvoiceController@select')->name('invoice.product.select');
     Route::post('/saveInvoice', 'InvoiceController@save')->name('saveInvoiceproducts');
-    Route::post('/createInvoice', 'InvoiceController@createInvoice')->name('createInvoiceNumber');
+    // Route::get('/createInvoice', 'InvoiceController@createInvoice')->name('createInvoiceNumber');
     Route::get('/invoice', 'InvoiceController@invoice')->name('final-invoice');
     Route::get('/downloadPDF/{id}','InvoiceController@downloadPDF');
     // Route::get('/readInvoice', 'InvoiceController@read')->name('readInvoice');
@@ -45,5 +46,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'client'], function() {
 
     // Incoming
     Route::resource('incoming', 'IncomingController');
+    Route::post('/draganddrop', 'IncomingController@draganddrop')->name('draganddrop');
+
     
 });

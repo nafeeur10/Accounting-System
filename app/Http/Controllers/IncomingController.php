@@ -36,37 +36,38 @@ class IncomingController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->hasFile('incomingFile'))
+        if($request->hasfile('incomingFile'))
         {
-            $incoming = new Incoming();
-            $incoming->fileName = 'File';
-            $incoming->save();
-    
-            $incomingAll = Incoming::latest()->first();
-            $lastId = $incomingAll->id;
-    
-    
-            $incomingFile = $request->file('incomingFile');
+            foreach($request->file('incomingFile') as $file)
+            {
+                $incoming = new Incoming();
+                // $incoming->fileName = 'File';
+                // $incoming->save();
 
-            $name=$lastId.$incomingFile->getClientOriginalName();
-            $uploadPath = 'Incoming/';
-            $incomingFile->move($uploadPath, $name);
+                $incomingAll = Incoming::latest()->first();
+                
+                if($incomingAll)
+                $lastId = ($incomingAll->id) + 1;
+                else
+                $lastId = 1;
 
-            $imageURL = $name;
+                $name=$lastId.$file->getClientOriginalName();
 
-            $updateFile = Incoming::find($lastId);
-            $updateFile->fileName = $imageURL;
+                $uploadPath = 'Incoming/';
+                $file->move($uploadPath, $name);
+  
+                $imageURL = $name;
 
-            $updateFile->save();
-    
+                // $updateFile = Incoming::find($lastId);
+                $incoming->fileName = $imageURL;
+
+                $incoming->save(); 
+            }
         }
         else
         {
             return redirect()->route('incoming.create');
         }
-
-        
-        
 
         return redirect()->route('incoming.index');
     }
@@ -114,6 +115,42 @@ class IncomingController extends Controller
     public function destroy(Incoming $incoming)
     {
         $incoming->delete();
+
+        return redirect()->route('incoming.index');
+    }
+
+    public function draganddrop(Request $request) {
+
+        if($request->hasfile('incomingDDFile'))
+        {
+            $incoming = new Incoming();
+
+            $file = $request->file('incomingDDFile');
+
+            $incomingAll = Incoming::latest()->first();
+                
+            if($incomingAll)
+                $lastId = ($incomingAll->id) + 1;
+            else
+                $lastId = 1;
+
+            $name=$lastId.$file->getClientOriginalName();
+
+            $uploadPath = 'Incoming/';
+            $file->move($uploadPath, $name);
+  
+            $imageURL = $name;
+
+                // $updateFile = Incoming::find($lastId);
+            $incoming->fileName = $imageURL;
+
+            $incoming->save(); 
+        }
+
+        else
+        {
+            return redirect()->route('incoming.create');
+        }
 
         return redirect()->route('incoming.index');
     }
